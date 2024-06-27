@@ -1,0 +1,457 @@
+show databases;
+create database db1;
+drop database db1;
+show databases;
+create database db2;
+use db2;
+show tables;
+create table tb1 (name varchar(10), age int);
+desc table tb1;
+show create table tb1;
+alter table tb1 add surname varchar(15);
+alter table tb1 drop column age;
+alter table tb1 modify column name varchar(15);
+drop table tb1;
+create table tb2 (
+	ph_no bigint not null,
+    email varchar(30) unique,
+    id int primary key,
+    age int,
+    check (age >= 18),
+    city varchar (20) default 'Mumbai'
+);
+show create table tb2; 
+
+-------------------------------------------------------------------------
+
+show databases;
+create database db3;
+show tables;
+use db3;
+create table student (
+	id int primary key auto_increment,
+    name varchar(20) not null,
+    age int not null
+);
+show tables;
+insert into student (name, age) values ('abc',17);
+select * from student;
+insert into student (name, age) values ('bcd',18), ('cde',18);
+insert into student (name, age) values (null,17);
+insert into student (name, age) values ('def',22);
+update student set age=19 where id=2;
+insert into student (name, age) values ('ghi',24);
+delete from student where id = 5;
+insert into student (name, age) values ('jkl',20);
+show tables;
+
+-----------------------------------------------------------------------------
+
+use db3;
+select * from student;
+select name,age from student;
+select name,age from student where age >=18;
+select name,age from student where age <=18;
+select name,age from student where name = 'bcd';
+select name,age from student where age between 17 and 20;
+select name,age from student where age = 17 or age = 22;
+select name,age from student where not age = 17 and not age = 22;
+select name,age from student where not age = 17 and not age = 22;
+select name,age from student where not age = 17 or not age = 22;
+select name,age from student where age in (17,22,20);
+select name,age from student where name like 'b%';
+select name,age from student where name like '_b%';
+select name,age from student where name like '___';
+select name,age from student where name like '%e';
+select name,age from student where name like 'b%';
+select name,age from student limit 2;
+select min(age) from student;
+select max(age) from student;
+select min(age) as Youngest from student;
+select max(age) as Oldest from student;
+select count(*) as minors from student where age < 18;
+select count(*) as adults from student where age >= 18;
+select avg(age) as average_age from student;
+select sum(age) as total from student;
+create table dept (
+	id int primary key,
+    name varchar(20) unique,
+    loc varchar(20) not null
+);
+show tables;
+insert into dept values (1,'a','mumbai'),(2,'b','bangalore'),
+						(3,'c','mumbai'),(4,'d','bangalore'),(5,'e','mumbai');
+select * from dept;
+select count(*) from dept group by loc;
+select count(*) as number, loc from dept group by loc;
+select loc, count(*) from dept group by loc having loc='mumbai';
+select name,loc from dept order by name;
+select id,name,loc from dept order by name;
+select id,name,loc from dept order by name desc;
+ -- asc : ascending and desc : descending
+ 
+------------------------------------------------------------------------------------------
+
+select * from student;
+select id,name,age,
+	case 
+		when age<0 then 'Invalid Age'
+        when age<=18 then 'Cannnot drive'
+        else 'Adults cann drive'
+	end as driving
+from student;
+insert into student (name, age) values ('klm',0), ('lmn',-2);
+create table table1 (
+	tb1_id int,
+    a int
+);
+create table table2 (
+	tb2_id int,
+    a int
+);
+show tables;
+insert into table1 values (100,1),(200,2);
+insert into table2 values (1000,1),(3000,3);
+select * from table1;
+select * from table2;
+select * from table1 inner join table2 on table1.a=table2.a;
+select * from table1 right join table2 on table1.a=table2.a;
+select * from table1 left join table2 on table1.a=table2.a;
+select * from table1 cross join table2;
+select * from table1 left join table2 on table1.a=table2.a
+union
+select * from table1 right join table2 on table1.a=table2.a;
+select a,tb1_id from table1
+union all
+select a,tb2_id from table2;
+select * from student;
+start transaction;
+insert into student(name,age) values ('zyx',50);
+insert into student(name,age) values ('yxw',55);
+rollback;
+start transaction;
+insert into student(name,age) values ('zyx',50);
+insert into student(name,age) values ('yxw',55);
+commit;
+
+--------------------------------------------------------------------------------
+
+create database db4;
+use db4;
+CREATE TABLE employees ( 
+	EMPLOYEE_ID INT PRIMARY KEY, 
+    FIRST_NAME VARCHAR(50), 
+    LAST_NAME VARCHAR(50), 
+    EMAIL VARCHAR(50), 
+    PHONE_NUMBER VARCHAR(15), 
+    HIRE_DATE DATE, 
+    JOB_ID VARCHAR(10), 
+    SALARY DECIMAL(10, 2) );
+show tables;
+select * from employees;
+INSERT INTO employees (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, JOB_ID, SALARY) VALUES (100, 'Steven', 'King', 'SKING', '515.123.4567', '1987-06-17', 'AD_PRES', 24000.00), 
+																												  (101, 'Neena', 'Kochhar', 'NKOCHHAR', '515.123.4568', '1987-06-18', 'AD_VP', 17000.00), 
+                                                                                                                  (102, 'Lex', 'De Haan', 'LDEHAAN', '515.123.4569', '1987-06-19', 'AD_VP', 17000.00), 
+                                                                                                                  (103, 'Alexander', 'Hunold', 'AHUNOLD', '590.423.4567', '1987-06-20', 'IT_PROG', 9000.00);
+												SELECT JOB_ID, COUNT(*) AS number_of_employees FROM employees GROUP BY JOB_ID;
+												
+												
+--------------------------------------------------------------------------------
+
+create database db4;
+use db4;
+CREATE TABLE employees ( 
+	EMPLOYEE_ID INT PRIMARY KEY, 
+    FIRST_NAME VARCHAR(50), 
+    LAST_NAME VARCHAR(50), 
+    EMAIL VARCHAR(50), 
+    PHONE_NUMBER VARCHAR(15), 
+    HIRE_DATE DATE, 
+    JOB_ID VARCHAR(10), 
+    SALARY DECIMAL(10, 2) );
+show tables;
+select * from employees;
+INSERT INTO employees (EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, JOB_ID, SALARY) VALUES (100, 'Steven', 'King', 'SKING', '515.123.4567', '1987-06-17', 'AD_PRES', 24000.00), 
+																												  (101, 'Neena', 'Kochhar', 'NKOCHHAR', '515.123.4568', '1987-06-18', 'AD_VP', 17000.00), 
+                                                                                                                  (102, 'Lex', 'De Haan', 'LDEHAAN', '515.123.4569', '1987-06-19', 'AD_VP', 17000.00), 
+                                                                                                                  (103, 'Alexander', 'Hunold', 'AHUNOLD', '590.423.4567', '1987-06-20', 'IT_PROG', 9000.00);
+												SELECT JOB_ID, COUNT(*) AS number_of_employees FROM employees GROUP BY JOB_ID;
+		
+		
+------------------------------------------------------------------------------------------------------------
+
+show databases;
+create database practice;
+use practice;
+create table employee (
+	emp_id int primary key,
+    emp_code int,
+    cep_name varchar(30) not null,
+    dep_id int,
+    phonne_no varchar(20) not null
+);
+show tables;
+insert into employee values (1,101,'Mark',1001,'9876543210'),
+							(2,102,'Joseph',1002,'9876543210'),
+                            (3,103,'John',1003,'9876543210'),
+                            (4,104,'Adam',1004,'9876543210'),
+                            (5,105,'Alex',1005,'9876543210');
+select count(*) from employee;
+call employee_count();
+call practice.employee_count();
+
+select * from employee where emp_code=102;
+call practice.employee_with_code(101);
+call practice.employee_with_code(104);
+
+set @maxempcode = 0;
+call practice.get_max_code(@maxempcode);
+select @maxwempcode;
+
+set @x = 2;
+call pratice.get_dep_code_from_id(@x);
+select @x;
+
+call practice.insert_employee(6,106,'Macie',1006,'9875684250');
+select  * from employee;
+
+select add_two_num(3,6) as sum;
+create table table_funtiom(
+id int,
+name varchar(100)
+);
+show tables;
+insert into table_funtiom values (100,'Mike'),
+									(100,'Sam'),
+                                    (102,'Adam'),
+                                    (103,'Carrol');
+select * from table_funtiom;
+call getResultSet(100);
+
++++++++++++++++++
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `employee_count`()
+BEGIN
+	select count(*) as Employee_Count from employee where dep_id is not null;
+END
+
+++++++++++++++++++
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `employee_with_code`(in var1 int)
+BEGIN
+	select * from employee where emp_code = var1;
+END
+
+++++++++++++++++++++
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_max_code`(out var1 int)
+BEGIN
+	select max(emp_code) into var1 from employee;
+END
+
++++++++++++++++++++
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_dep_code_from_id`(inout var1 int)
+BEGIN
+	select dep_id into var1 from employee where emp_id = var1;
+END
+
+++++++++++++++++++++
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `add_two_num`(a int, b int) RETURNS int
+    DETERMINISTIC
+BEGIN
+	declare c int ;
+    set c = (a+b);
+	RETURN c;
+END
+
++++++++++++++++++++++++++
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_employee`(in id int,in code int,in name varchar(30),
+										in dep_id int, in num varchar(20))
+BEGIN
+	insert into employee (emp_id,emp_code,emp_name,dep_id,phone_no)
+		values (id,code,name,dep_id,num);
+END
+
++++++++++++++++++++++++++++++
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getResultSet`(studId int)
+BEGIN
+	select * from table_funtiom where id = studId;
+END
+
+
+
+++++++++++++++++++++++++++
+
+---------------------------------------------------------------------------------
+
+
+-- Partitioning
+show tables;
+create table range_partitiong(
+	bill_no int not null,
+    cust_code int not null,
+    amount int not null
+)
+partition by range (amount)
+(
+	partition p0 values less than (100),
+    show databases;
+create database practice;
+use practice;
+create table employee (
+	emp_id int primary key,
+    emp_code int,
+    cep_name varchar(30) not null,
+    dep_id int,
+    phonne_no varchar(20) not null
+);
+show tables;
+insert into employee values (1,101,'Mark',1001,'9876543210'),
+							(2,102,'Joseph',1002,'9876543210'),
+                            (3,103,'John',1003,'9876543210'),
+                            (4,104,'Adam',1004,'9876543210'),
+                            (5,105,'Alex',1005,'9876543210');
+select count(*) from employee;
+call employee_count();
+call practice.employee_count();
+
+select * from employee where emp_code=102;
+call practice.employee_with_code(101);
+call practice.employee_with_code(104);
+
+set @maxempcode = 0;
+call practice.get_max_code(@maxempcode);
+select @maxwempcode;
+
+set @x = 2;
+call pratice.get_dep_code_from_id(@x);
+select @x;
+
+call practice.insert_employee(6,106,'Macie',1006,'9875684250');
+select  * from employee;
+
+select add_two_num(3,6) as sum;
+create table table_funtiom(
+id int,
+name varchar(100)
+);
+show tables;
+insert into table_funtiom values (100,'Mike'),
+									(100,'Sam'),
+                                    (102,'Adam'),
+                                    (103,'Carrol');
+select * from table_funtiom;
+call getResultSet(100);
+)
+
+
+----------------------------------------------------------------------
+
+
+-- partitioning
+show tables;
+create table range_partitioning(
+	bill_no int not null,
+    cust_code int not null,
+    amount int not null
+)
+partition by range  (amount)
+(
+	partition p0 values less than (100),
+    partition p1 values less than (500),
+    partition p2 values less than (1000),
+    partition p3 values less than (1500)
+);
+desc table range_partitioning;
+insert into range_partitioning values (1,101,25),
+												(2,102,125),
+                                                (3,102,425),
+                                                (4,102,925),
+                                                (5,102,1125),
+                                                (6,102,1425);
+select * from range_partitioning where amount = 925;
+select Partition_Name, Table_Rows from Information_Schema.Partitions where Table_Name = 'range_partitioning';
+
+
+create table list_partitioning(
+	bill_no int not null,
+    agent_code int not null,
+    review int not null
+)
+partition by list (review)
+(
+	partition pA values in (1,2,3,4),
+    partition pB values in (5,0),
+    partition pC values in (7,8,9)
+);
+desc table list_partitioning;
+insert into list_partitioning values (1,101,1),
+										(2,102,3),
+										(3,102,5),
+										(4,102,6),
+										(5,102,8),
+										(6,102,9);
+select Partition_Name, Table_Rows from Information_Schema.Partitions where Table_Name = 'list_partitioning';
+
+
+create table hash_partitioning(
+	id int not null,
+    dep int not null,
+    amount int not null
+)
+partition by hash (id) partitions 3;
+insert into hash_partitioning values (1,101,25),
+										(2,102,1225),
+                                        (3,102,425),
+                                        (4,102,925),
+                                        (5,102,1125),
+                                        (6,102,1425);
+select Partition_Name, Table_Rows from Information_Schema.Partitions where Table_Name = 'hash_partitioning';
+
+
+create table key_partitioning(
+	id int primary key,
+    dep int not null,
+    amount int not null
+)
+partition by key() partitions 2;
+insert into key_partitioning values (1,101,25),
+										(2,102,125),
+                                        (3,102,425),
+                                        (4,102,925),
+                                        (5,102,1125),
+                                        (6,102,1425);
+select * from key_partitioning;
+select Partition_Name, Table_Rows from Information_Schema.Partitions where Table_Name = 'key_partitioning';
+
+								
+
+create table sub_partitioning(
+	id int not null,
+	dep int not null,
+	amount int not null  
+)
+partition by range(amount) 
+subpartition by hash(id)
+subpartitions 4
+(
+	partition p0 values less than (500),
+    partition p1 values less than (maxvalue)
+);
+insert into sub_partitioning values (1,101,25),
+									(2,102,125),
+									(3,102,425),
+									(4,102,925),
+									(5,102,1125),
+									(6,102,1425);	
+select Partition_Name, Table_Rows from Information_Schema.Partitions where Table_Name = 'sub_partitioning';
+
+	
+	
+	
+-------------------------------------------------------------------------------------										
+												-																													
