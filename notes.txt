@@ -1,0 +1,186 @@
+Kubernetes Cluster Architecture - Contd
+Components of a Kubernetes Cluster
+Master Node
+Worker Nodes
+Master Node Components
+API Server: Frontend for the Kubernetes control plane.
+etcd: Consistent and highly-available key-value store.
+Controller Manager: Ensures that the shared state of the cluster matches the desired state.
+Scheduler: Assigns work to nodes.
+Worker Node Components
+kubelet: Ensures containers are running in a Pod.
+kube-proxy: Maintains network rules on nodes. Container Runtime: Software that runs containers.
+
+-------------------------------------
+
+The Role of the Kubernetes API Server
+What is the API Server?
+The API Server (kube-apiserver) is the frontend of the Kubernetes control plane. It exposes the Kubernetes API.
+Functions of the API Server
+Centralized RESTful Interface: Handles RESTful operations such as create, read, update, and delete (CRUD) requests for Kubernetes resources (e.g., pods, services).
+Validation: Validates requests before processing them.
+Authentication and Authorization: Ensures that only authenticated and authorized
+requests are processed. All Communications Pass Through: All cluster interactions, including internal component communications, go through the API Server.
+
+
+----------------------------------------
+
+Understanding etcd
+What is etcd?
+etcd is a consistent and highly-available key-value store that Kubernetes uses for all cluster data storage.
+Functions of eted
+Storage of Cluster State: Stores the entire state of the Kubernetes cluster, including
+configuration data, resource states, and metadata. Consistency and Reliability: Uses the Raft consensus algorithm to ensure strong consistency and fault tolerance.
+Backup and Recovery: Critical for recovering the state of the cluster in case of failures.
+
+------------------------------------
+
+The Role of the Controller Manager
+What is the Controller Manager?
+. The Controller Manager (kube-controller-manager) runs controllers, which are background processes that regulate the state of the cluster.
+Functions of the Controller Manager
+Node Controller: Manages node lifecycle (e.g., adding, removing, checking the health of
+nodes).
+Replication Controller: Ensures the desired number of pod replicas are running.
+. Endpoint Controller: Manages the endpoint objects (links services and pods).
+Service Account and Token Controllers: Manages service accounts and their tokens.
+
+------------------------------------------
+
+The Role of the Scheduler
+What is the Scheduler?
+The Scheduler (kube-scheduler) assigns newly created pods to nodes based on resource requirements and other constraints.
+Functions of the Scheduler
+Pod Placement: Determines the most suitable node for a pod based on factors like resource availability, hardware/software/policy constraints, affinity and anti-affinity specifications, data locality, and more.
+Balancing Loads: Distributes workloads evenly across the cluster to optimize resource usage.
+Priority and Fairness: Considers pod priorities and ensures fair resource allocation.
+
+--------------------------------------------------
+
+The Role of the kubelet
+What is kubelet?
+kubelet is an agent that runs on each worker node in the Kubernetes cluster. It ensures that containers are running in a Pod as specified.
+Functions of kubelet
+Pod Lifecycle Management: Manages the lifecycle of pods running on a node. This
+includes starting, stopping, and restarting containers as needed. Node Registration: Registers the node with the Kubernetes API server during node initialization.
+Health Monitoring: Regularly checks the health of the pods and containers on its node and reports status to the API server.
+Configuration Management: Ensures that the desired state of the containers 
+by checking the pod specifications and making necessary adjustments.
+Resource Management: Works with the Container Runtime to allocate necess resources (CPU, memory) to containers.
+
+-------------------------------------------
+
+The Role of kube-proxy
+What is kube-proxy?
+kube-proxy is a network proxy that runs on each worker node in the Kubernetes cluster. It manages network communication within the cluster.
+Functions of kube-proxy
+Service Discovery: Maintains network rules on nodes to allow communication to pods
+from inside or outside the cluster.
+Network Rules: Implements network rules for forwarding traffic to the correct pod based on IP address and port number.
+Load Balancing: Distributes network traffic across various pods in a service, providing load balancing.
+Connection Forwarding: Forwards requests to the correct backend pod based on service and endpoint information.
+
+------------------------------------------------
+
+The Role of the Container Runtime
+What is the Container Runtime?
+The Container Runtime is the software responsible for running containers on a node. Kubernetes supports several container runtimes like Docker, containerd, and CRI-O.
+Functions of the Container Runtime
+Container Management: Handles the lifecycle of containers, including pulling container
+images, starting, stopping, and deleting containers.
+Resource Isolation: Ensures containers are isolated from each other using cgroups and namespaces.
+Image Management: Manages downloading, caching, and managing container images. Interface with kubelet: Communicates with kubelet to manage containers based on pod specifications.
+
+-------------------------------------------------
+
+Advantages of Kubernetes:
+1.Orchestration: Kubernetes automates the deployment and scaling of applications, making it easier to manage complex microservices architectures.
+2.Scalability: Kubernetes can scale applications up or down based on demand, ensuring optimal resource utilization.
+3.High Availability: Kubernetes distributes applications across multiple nodes, providing redundancy and minimizing downtime.
+4.Self-Healing: Kubernetes monitors the health of applications and automatically restarts or replaces unhealthy containers or pods.
+5.Declarative Configuration: Kubernetes uses declarative configuration files to define the desired state of applications, reducing manual intervention and configuration drift.
+6.Rollouts and Rollbacks: Kubernetes supports controlled updates and rollbacks of applications, allowing you to manage changes without disrupting the user experience.
+
+-------------------------------------------
+
+Pods
+What are Pods?
+The smallest and simplest Kubernetes object. A Pod represents a single instance of a running process in your cluster.
+Composition: Can contain one or more containers (usually one), shared storage, network IP, and specifications on how to run the containers.
+Key Points
+Single IP Address: Each Pod has its own IP address in the cluster.
+Shared Context: Containers within a Pod share the same network namespace and can communicate with each other using localhost.
+Lifecycle: Pods are ephemeral; they are created, destroyed, and replaced rather than updated.
+
+----------------------------------------------
+
+Deployments
+What are Deployments?
+A higher-level abstraction that manages Pods and ReplicaSets, providing declarative updates to applications.
+Purpose: To manage the deployment and scaling of a set of Pods and ensure a specified number of Pods are running at all times.
+Key Points
+Declarative Updates: Allows you to describe an application's life cycle, including
+updates and rollbacks. Rolling Updates and Rollbacks: Ensures updates happen progressively to avoid downtime.
+Scaling: Easily scale the number of Pod replicas.
+
+--------------------------------------------------
+
+Services
+What are Services?
+An abstraction that defines a logical set of Pods and a policy by which to access them.
+Purpose: To provide stable IP addresses, DNS names, and load balancing for a set of Pods.
+Types of Services
+ClusterIP: Exposes the service on a cluster-internal IP. Default type.
+NodePort: Exposes the service on each Node's IP at a static port.
+LoadBalancer: Exposes the service using a cloud provider's load balancer.
+ExternalName: Maps a service to a DNS name.
+
+------------------------------------------------
+
+Horizontal Pod Autoscaler (ScaleSets)
+What is a Horizontal Pod Autoscaler?
+Automatically scales the number of pods in a deployment or replica set based on observed CPU utilization (or other metrics).
+Purpose: To ensure the application scales in response to demand.
+Key Points
+Metrics: Uses metrics from the Metrics API to make scaling decisions.
+Dynamic Scaling: Adjusts the number of running Pods based on resource usage.
+
+------------------------------------
+
+Secrets
+What are Secrets?
+Used to store and manage sensitive information, such as passwords, OAuth tokens, and SSH keys.
+Purpose: To ensure sensitive data is securely handled in a Kubernetes cluster.
+Key Points
+Encoded Data: Secrets are base64-encoded to avoid simple plaintext storage.
+Mounting: Can be mounted as volumes or exposed as environment variables in containers.
+
+---------------------------------------
+
+Config Maps
+What are ConfigMaps?
+Used to store non-confidential data in key-value pairs.
+Purpose: To manage configuration data separately from application code.
+Key Points
+Mounting: Can be mounted as volumes or exposed as environment variables in containers.
+Usage: Typically used for application configuration data.
+
+------------------------------------------
+
+What is Blue-Green Deployment?
+Blue-green deployment is a strategy that reduces downtime and risk by running two identical production environments, only one of which serves live production traffic at any given time.
+Blue Environment: Current production environment.
+Green Environment: New version environment, initially idle.
+Switch Traffic: Once the green environment is ready and tested, switch the traffic from blue to green.
+Benefits: Minimal downtime, easy rollback, and smooth transition.
+Drawbacks: Requires double the resources.
+
+----------------------------------------------
+
+What is Canary Deployment?
+Canary deployment is a strategy that reduces risk by gradually rolling out the new version to a small subset of users before making it available to everyone.
+Canary Release: A small percentage of users get the new version while the rest use the stable
+version.
+Incremental Rollout: Gradually increase the percentage of users on the new version.
+Benefits: Reduced risk, controlled rollout, and easier to test in production.
+Drawbacks: More complex routing and monitoring required
